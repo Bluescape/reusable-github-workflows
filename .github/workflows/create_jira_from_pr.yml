@@ -1,0 +1,82 @@
+name: Create JIRA for PR
+
+on:
+  workflow_call:
+    secrets:
+      JIRA_HOST:
+        required: true
+      JIRA_USERNAME:
+        required: true
+      JIRA_PASSWORD:
+        required: true
+
+jobs:
+  create_jira:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Check if matched
+        id: check
+        if: ${{ startsWith(github.event.comment.body, '/jira') }}
+        run: |
+          echo 'Matching comment found'
+      - name: Get PR SHA
+        if: steps.check.conclusion == 'success'
+        id: sha
+        uses: actions/github-script@v4
+        with:
+          result-encoding: string
+          script: |
+            const { owner, repo, number } = context.issue;
+            const pr = await github.pulls.get({
+              owner,
+              repo,
+              pull_number: number,
+            });
+            return pr.data.head.sha
+      - uses: actions/checkout@v1
+        if: steps.check.conclusion == 'success'
+        with:
+          ref: ${{ steps.sha.outputs.result }}
+      - name: Get User Email
+        if: steps.check.conclusion == 'success'
+        id: get-email
+        run: |
+          commitCount=1
+          while [ -z "$email" ]
+          do
+            sha=$(git rev-parse HEAD)
+            echo Going back $commitCount commit with sha $sha
+            emails=$(git show -s --format='%ae' $sha -${commitCount})
+            echo Got emails: ${emails[*]}
+            # Ignore the merge commits made by github
+            email=$(echo "$emails" | grep -v "@users.noreply.github.com" || true)
+            ((commitCount=commitCount+1))
+          done
+          echo User email found to be: $email
+          echo "::set-output name=email::${email}"
+      - name: Determine Project
+        if: steps.check.conclusion == 'success'
+        id: parse-project-key
+        env:
+          COMMENT: ${{ github.event.comment.body }}
+        run: |
+          key=$(echo $COMMENT | awk '{print $2}')
+          echo $key
+          if [ -z "$key" ]; then
+            echo "Key not found in comment"
+            exit 1
+          fi
+          echo "::set-output name=key::${key}"
+      - uses: bluescape/pr-jira-action@v1
+        if: steps.check.conclusion == 'success'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          project-name: ${{ steps.parse-project-key.outputs.key }}
+          host: ${{ secrets.JIRA_HOST }}
+          username: ${{ secrets.JIRA_USERNAME }}
+          password: ${{ secrets.JIRA_PASSWORD }}
+          assignee: ${{ steps.get-email.outputs.email }}
