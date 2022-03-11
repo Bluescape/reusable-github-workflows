@@ -6,4 +6,4 @@ on:
 
 jobs:
   title_check:
-    uses: ./jira/validate_pr.yml@main
+    uses: ./.github/workflows/validate_pr.yml@main
