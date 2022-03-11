@@ -6,4 +6,4 @@ on:
 
 jobs:
   title_check:
-    uses: bluescape/reusable-github-workflows/.github/workflows/validate_pr.yml@dev/lmartin/test-2
+    uses: bluescape/reusable-github-workflows/jira/validate_pr.yml@dev/lmartin/test-2
