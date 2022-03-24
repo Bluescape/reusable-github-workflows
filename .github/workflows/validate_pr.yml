@@ -8,6 +8,6 @@ jobs:
     name: Title Validation
     runs-on: ubuntu-latest
     steps:
-      - name: Verify PR Title Contains a JIRA
+      - name: Verify that the PR Title Starts with a JIRA
         if: ${{ ! contains( github.event.pull_request.labels.*.name, 'SKIP PR VALIDATION') }}
         run: echo "${{ github.event.pull_request.title }}" | grep -Pq '^[a-zA-Z0-9]{2,10}-[0-9]{1,10}( |:|-|,).+'
