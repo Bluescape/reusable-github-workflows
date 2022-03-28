@@ -10,4 +10,4 @@ jobs:
     steps:
       - name: Verify that the PR title starts with a JIRA
         if: ${{ ! contains( github.event.pull_request.labels.*.name, 'SKIP PR VALIDATION') }}
-        run: echo "${{ github.event.pull_request.title }}//"/\"" | grep -Pq '^(Revert \")*[a-zA-Z0-9]{2,10}-[0-9]{1,10}( |:|-|,).+'
+        run: echo "${{ github.event.pull_request.title }}" | sed 's/"/\"/g' | grep -Pq '^(Revert \")*[a-zA-Z0-9]{2,10}-[0-9]{1,10}( |:|-|,).+'
