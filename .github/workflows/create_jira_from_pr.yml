@@ -13,18 +13,13 @@ on:
 jobs:
   create_jira:
     runs-on: ubuntu-latest
+    if: ${{ startsWith(github.event.comment.body, '/jira') }}
     steps:
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-      - name: Check if matched
-        id: check
-        if: ${{ startsWith(github.event.comment.body, '/jira') }}
-        run: |
-          echo 'Matching comment found'
       - name: Get PR SHA
-        if: steps.check.conclusion == 'success'
         id: sha
         uses: actions/github-script@v4
         with:
@@ -38,11 +33,9 @@ jobs:
             });
             return pr.data.head.sha
       - uses: actions/checkout@v1
-        if: steps.check.conclusion == 'success'
         with:
           ref: ${{ steps.sha.outputs.result }}
       - name: Get User Email
-        if: steps.check.conclusion == 'success'
         id: get-email
         run: |
           commitCount=1
@@ -59,7 +52,6 @@ jobs:
           echo User email found to be: $email
           echo "::set-output name=email::${email}"
       - name: Determine Project
-        if: steps.check.conclusion == 'success'
         id: parse-project-key
         env:
           COMMENT: ${{ github.event.comment.body }}
@@ -72,7 +64,6 @@ jobs:
           fi
           echo "::set-output name=key::${key}"
       - uses: bluescape/pr-jira-action@v1
-        if: steps.check.conclusion == 'success'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           project-name: ${{ steps.parse-project-key.outputs.key }}
