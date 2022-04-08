@@ -1,0 +1,22 @@
+name: Handle Deploy Comments
+
+on:
+  workflow_call:
+    secrets:
+      TOKEN:
+        required: true
+
+jobs:
+  cleanup_deployment:
+    runs-on: ubuntu-latest
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/deploy destroy')
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Cleanup On-Demand Instance
+        uses: bluescape/trigger-deployment-action@v2
+        with:
+          github-token: ${{ secrets.TOKEN }}
+          deploy-type: 'cleanup-on-demand'

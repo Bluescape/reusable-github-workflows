@@ -1,9 +1,0 @@
-name: Validate PR
-
-on:
-  pull_request:
-    types: [opened, synchronize, edited]
-
-jobs:
-  title_check:
-    uses: ./.github/workflows/validate_pr.yml
