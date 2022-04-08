@@ -15,6 +15,7 @@ jobs:
         run: |
           pr_title=${{ github.event.pull_request.title }}
           cleaned_pr_title=${pr_title//'/\'}
-          echo '${{ cleaned_pr_title }}' | grep -Pq '^(Revert \")*[a-zA-Z0-9]{2,10}-[0-9]{1,10}( |:|-|,).+'
+          echo $cleaned_pr_title
+          # echo '${{ cleaned_pr_title }}' | grep -Pq '^(Revert \")*[a-zA-Z0-9]{2,10}-[0-9]{1,10}( |:|-|,).+'
           # cleaned_pr_title=$(echo ${{ github.event.pull_request.title }} | sed 's/"/\"/g')
           # echo ${github.event.pull_request.title@Q} | grep -Pq '^(Revert \")*[a-zA-Z0-9]{2,10}-[0-9]{1,10}( |:|-|,).+'
