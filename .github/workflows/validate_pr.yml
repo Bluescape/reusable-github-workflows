@@ -2,6 +2,8 @@ name: Validate PR
 
 on:
   workflow_call:
+  pull_request:
+    types: [opened, synchronize, edited]
 
 jobs:
   title_check:
