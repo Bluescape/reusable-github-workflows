@@ -17,6 +17,8 @@ Comment `/jira` on a pull request to easily create a JIRA based on the context o
 /jira WebC
 # It handles setting the component (only needed if required by the JIRA project)
 /jira AD isam
+# It handles setting a component even if it has a space (also not case sensitive)
+/jira QAA "Collab performance"
 ```
 The core functionality is handled by the GitHub Action: https://github.com/Bluescape/pr-jira-action
 
