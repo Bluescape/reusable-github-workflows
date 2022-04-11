@@ -24,10 +24,12 @@ The core functionality is handled by the GitHub Action: https://github.com/Blues
 
 This will:
 - Create a JIRA based on the project key you provide
-- This JIRA will contain the PR title as a summary and the description as the description
-- Assign it to the person who last committed this PR as long as the github email matches the JIRA email
-- Mark it as "In Progress"
-- Update the PR title to have the JIRA as a prefix
+- This JIRA will contain the PR title as a summary and the PR description as the description
+- It then will assign it to the person who last committed to this PR (as long as the github email matches the JIRA email)
+- Then it will mark the JIRA's status as "In Progress"
+- And finally, it will update the PR title to have the JIRA as a prefix
+
+NOTE: Due to GitHub's functionality of a bot not allowing the triggering of another bot, the Validate PR check will not be retriggered automatically. Edit the description or title to re-trigger the check.
 
 ### Implementation
 ```yaml
@@ -77,7 +79,7 @@ jobs:
 ## validate_pr.yml
 
 ### Description
-Validates that a pull request title starts with a JIRA.
+Validates that a pull request title starts with a JIRA ticket key.
 
 ### Usage
 When implemented in a repo, a check will run whenever a PR is created or the title/description is edited by a user.
