@@ -51,22 +51,27 @@ jobs:
           done
           echo User email found to be: $email
           echo "::set-output name=email::${email}"
-      - name: Determine Project
-        id: parse-project-key
+      - name: Parse Arguments
+        id: parse-args
         env:
           COMMENT: ${{ github.event.comment.body }}
         run: |
-          key=$(echo $COMMENT | awk '{print $2}')
-          echo $key
-          if [ -z "$key" ]; then
-            echo "Key not found in comment"
+          project=$(echo $COMMENT | xargs -n1 echo | sed -n 2p)
+          echo $project
+          component=$(echo $COMMENT | xargs -n1 echo | sed -n 3p)
+          echo $component
+
+          if [ -z "$project" ]; then
+            echo "project not found in comment"
             exit 1
           fi
-          echo "::set-output name=key::${key}"
-      - uses: bluescape/pr-jira-action@v1
+          echo "::set-output name=project::${project}"
+          echo "::set-output name=component::${component}"
+      - uses: bluescape/pr-jira-action@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          project-name: ${{ steps.parse-project-key.outputs.key }}
+          project-name: ${{ steps.parse-args.outputs.project }}
+          component: ${{ steps.parse-args.outputs.component }}
           host: ${{ secrets.JIRA_HOST }}
           username: ${{ secrets.JIRA_USERNAME }}
           password: ${{ secrets.JIRA_PASSWORD }}
