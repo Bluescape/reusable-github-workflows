@@ -67,7 +67,7 @@ jobs:
           fi
           echo "::set-output name=project::${project}"
           echo "::set-output name=component::${component}"
-      - uses: bluescape/pr-jira-action@main
+      - uses: bluescape/pr-jira-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           project-name: ${{ steps.parse-args.outputs.project }}
