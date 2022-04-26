@@ -9,13 +9,68 @@ on:
 jobs:
   cleanup_deployment:
     runs-on: ubuntu-latest
-    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/deploy destroy')
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/deploy')
     steps:
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+      # /deploy create
+      - name: Get PR SHA
+        if: startsWith(github.event.comment.body, '/deploy create')
+        id: sha
+        uses: actions/github-script@v4
+        with:
+          result-encoding: string
+          script: |
+            const { owner, repo, number } = context.issue;
+            const pr = await github.pulls.get({
+              owner,
+              repo,
+              pull_number: number,
+            });
+            return pr.data.head.sha
+      - uses: actions/checkout@v3
+        if: startsWith(github.event.comment.body, '/deploy create')
+        with:
+          path: .github/deploy-config.json
+          ref: ${{ steps.sha.outputs.result }}
+      - name: Determine IMAGE
+        if: startsWith(github.event.comment.body, '/deploy create')
+        id: get-image
+        run: |
+          image=$(cat .github/deploy-config.json | jq '.images | join(",")')
+          echo ::set-output name=image::"$image"
+      - name: Determine TAG
+        if: startsWith(github.event.comment.body, '/deploy create')
+        id: get-tag
+        env:
+          SHA: ${{ steps.sha.outputs.result }}
+        run: |
+          echo ${SHA::7}
+          echo ::set-output name=tag::"${SHA::7}"
+      - name: Parse Arguments
+        if: startsWith(github.event.comment.body, '/deploy create')
+        id: parse-args
+        env:
+          COMMENT: ${{ github.event.comment.body }}
+        run: |
+          cluster=$(echo $COMMENT | xargs -n1 echo | sed -n 2p)
+          if [ ! -z "$cluster" ]; then
+            echo "::set-output name=cluster::${cluster}"
+          fi
       - name: Cleanup On-Demand Instance
+        if: startsWith(github.event.comment.body, '/deploy create')
+        uses: bluescape/trigger-deployment-action@v2
+        with:
+          github-token: ${{ secrets.TOKEN }}
+          deploy-type: 'on-demand'
+          image: ${{ steps.get-image.outputs.image }}
+          tag: ${{ steps.get-tag.outputs.tag }}
+          cluster: ${{ steps.parse-args.outputs.cluster}}
+      # /deploy destroy
+      - name: Cleanup On-Demand Instance
+        if: startsWith(github.event.comment.body, '/deploy destroy')
         uses: bluescape/trigger-deployment-action@v2
         with:
           github-token: ${{ secrets.TOKEN }}
