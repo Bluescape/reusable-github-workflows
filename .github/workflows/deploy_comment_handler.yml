@@ -39,7 +39,7 @@ jobs:
         if: startsWith(github.event.comment.body, '/deploy create')
         id: get-image
         run: |
-          image=$(cat .github/deploy-config.json | jq '.images | join(",")')
+          image=$(cat .github/comment-config.json | jq '.deploy.images | join(",")')
           echo ::set-output name=image::"$image"
       - name: Determine TAG
         if: startsWith(github.event.comment.body, '/deploy create')
