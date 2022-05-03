@@ -26,5 +26,5 @@ jobs:
         uses: alexeyatbluescape/github-tag-action@bugfix/semver-empty-results
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: false
+          WITH_V: true
           RELEASE_BRANCHES: main
