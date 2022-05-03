@@ -23,7 +23,7 @@ jobs:
 
       - name: Module tag bump
         # You may pin to the exact commit or the version.
-        uses: anothrNick/github-tag-action@1.39.0
+        uses: alexeyatbluescape/github-tag-action@bugfix/semver-empty-results
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: false
