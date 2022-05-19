@@ -17,6 +17,11 @@ jobs:
     uses: ./.github/workflows/validate_pr.yml
     with:
       title: "JIRA-007: Title here"
+  on_revert:
+    name: On Revert - Expect Pass
+    uses: ./.github/workflows/validate_pr.yml
+    with:
+      title: "Revert \"JIRA-007: Title her\""
   with_no_title:
     name: With No Title - Expect Fail
     uses: ./.github/workflows/validate_pr.yml
