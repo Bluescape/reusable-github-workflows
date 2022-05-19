@@ -1,0 +1,35 @@
+name: Test Validate PR
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/validate_pr.yml
+      - .github/workflows/validate_pr_test.yml
+
+jobs:
+  with_space:
+    name: With Space - Expect Pass
+    uses: ./.github/workflows/validate_pr.yml
+    with:
+      title: "JIRA-007 Title here"
+  with_colon:
+    name: With Colon - Expect Pass
+    uses: ./.github/workflows/validate_pr.yml
+    with:
+      title: "JIRA-007: Title here"
+  with_no_title:
+    name: With No Title - Expect Fail
+    uses: ./.github/workflows/validate_pr.yml
+    with:
+      title: "JIRA-007"
+  verify_negative_tests:
+    needs: [with_no_title]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Validate test status
+        run: |
+          if [ "${{ needs.with_no_title.result }}" != "failure" ]; then
+            echo "No Title Passed when it shouldn't"
+            exit 1
+          fi
