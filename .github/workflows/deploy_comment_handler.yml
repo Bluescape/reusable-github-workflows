@@ -57,7 +57,7 @@ jobs:
         run: |
           cluster=$(echo $COMMENT | xargs -n1 echo | sed -n 2p)
           if [ ! -z "$cluster" ]; then
-            echo "::set-output name=cluster::${cluster}"
+            echo "::set-output name=cluster::${cluster:=alpha}"
           fi
       - name: Cleanup On-Demand Instance
         if: startsWith(github.event.comment.body, '/deploy create')
