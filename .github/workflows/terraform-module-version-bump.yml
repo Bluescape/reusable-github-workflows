@@ -23,7 +23,8 @@ jobs:
 
       - name: Module tag bump
         # You may pin to the exact commit or the version.
-        uses: anothrNick/github-tag-action@1.39.0
+        # TODO: put back to anothrNick/github-tag-action@1.??.? when fix available. 1.39.0 is broken
+        uses: Bluescape/github-tag-action@1.39.1-bugfix
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
