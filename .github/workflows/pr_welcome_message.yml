@@ -16,6 +16,7 @@ jobs:
         with:
           github-token: ${{secrets.BBRO_GITHUBPAT}}
           script: |
+            console.log(JSON.stringify(context))
             # await github.issues.createComment({
             #   issue_number: issueNumber,
             #   owner,
