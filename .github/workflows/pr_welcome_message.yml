@@ -20,5 +20,21 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `👋 Why hello there, welcome to the repository! Here are some helpful tips and tricks to help you along your voyage.`,
+              body: `👋 Why hello there, welcome to the repository! Here are some helpful tips and tricks to help you along your voyage. 
+
+              ### On-Demand Deployments
+              #### Deploying
+              - Add a deploy label to your PR.
+              - Push a new commit.
+
+              #### Destroying
+              - Comment /deploy destroy on this PR.
+
+              [More information in the wiki](https://confluence.common.bluescape.com/confluence/display/BDT/On-Demand+Deployments)
+
+              ### Create a JIRA from your PR
+              - Comment /jira <project-key> onto this PR
+              Note: You need to update the description or title to re-trigger the check after running this. 
+
+              [More information in the README](https://github.com/Bluescape/reusable-github-workflows#create_jira_from_pryml)`,
             })
