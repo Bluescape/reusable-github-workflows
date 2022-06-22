@@ -29,11 +29,14 @@ jobs:
 
               #### Destroying
               - Comment \`/deploy destroy\` on this PR.
+              - Sit back and sip your coffee.
 
               [More information in the wiki](https://confluence.common.bluescape.com/confluence/display/BDT/On-Demand+Deployments)
 
               ### Create a JIRA from your PR
-              - Comment \`/jira <project-key>\` onto this PR
+              - Comment \`/jira <project-key>\` onto this PR. Example: \`/jira NEX\`
+              - Wait for a comment with a link to the JIRA
+              
               Note: You need to update the description or title to re-trigger the check after running this. 
 
               [More information in the README](https://github.com/Bluescape/reusable-github-workflows#create_jira_from_pryml)`
