@@ -16,9 +16,9 @@ jobs:
         with:
           script: |
             console.log(JSON.stringify(context))
-            # await github.issues.createComment({
-            #   issue_number: issueNumber,
-            #   owner,
-            #   repo,
-            #   body: 'Testing',
-            # })
+            await github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Why hello there!'
+            })
