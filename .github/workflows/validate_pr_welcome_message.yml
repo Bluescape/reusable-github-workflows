@@ -1,0 +1,11 @@
+name: Open PR
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  opened:
+    uses: ./.github/workflows/open_pr_message.yml
+    secrets: inherit
