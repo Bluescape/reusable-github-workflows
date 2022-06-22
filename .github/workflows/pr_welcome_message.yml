@@ -22,5 +22,5 @@ jobs:
               repo: context.repo.repo,
               body: `👋 Why hello there, welcome to the repository! Here are some helpful tips and tricks to help you along your voyage. 
 
-              `,
+                `,
             })
