@@ -28,6 +28,11 @@ jobs:
               - Push a new commit.
 
               #### Destroying
+              Deployments will automatically cleanup if:
+              - A PR is closed.
+              - If the deployment is not updated for 7 days.
+
+              But if you're done with the deployment and would like to save the company some money.
               - Comment \`/deploy destroy\` on this PR.
               - Sit back and sip your coffee.
 
