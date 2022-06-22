@@ -20,7 +20,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `👋 Why hello there, welcome to the repository! Here are some helpful tips and tricks to help you along your voyage. 
-
-                `,
+              body: `👋 Why hello there, welcome to the repository! Here are some helpful tips and tricks to help you along your voyage.`,
             })
