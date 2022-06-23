@@ -30,7 +30,7 @@ jobs:
               #### Destroying
               Deployments will automatically cleanup if:
               - A PR is closed.
-              - If the deployment is not updated for 7 days.
+              - The deployment is not updated for 7 days.
 
               But if you're done with the deployment and would like to save the company some money.
               - Comment \`/deploy destroy\` on this PR.
@@ -39,7 +39,7 @@ jobs:
               [More information in the wiki](https://confluence.common.bluescape.com/confluence/display/BDT/On-Demand+Deployments)
 
               ### Create a JIRA from your PR
-              - Comment \`/jira <project-key>\` onto this PR. Example: \`/jira NEX\`
+              - Comment \`/jira <project-key> <(optional)component>\` onto this PR. Example: \`/jira NEX\` or \`/jira QAA Framework\`
               - Wait for a comment with a link to the JIRA
               
               Note: You need to update the description or title to re-trigger the check after running this. 
