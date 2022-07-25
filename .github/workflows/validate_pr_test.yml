@@ -26,12 +26,12 @@ jobs:
     name: With No Title - Expect Fail
     uses: ./.github/workflows/validate_pr.yml
     with:
-      title: "TEST-007"
+      title: "TEST-007: Test"
   jira_contains_jira:
     name: With JIRA in Title - Expect Fail
     uses: ./.github/workflows/validate_pr.yml
     with:
-      title: "JIRA-007"
+      title: "JIRA-007: Test"
   verify_negative_tests:
     needs: [with_no_title, jira_contains_jira]
     runs-on: ubuntu-latest
