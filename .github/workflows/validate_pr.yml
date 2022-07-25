@@ -20,7 +20,7 @@ jobs:
         env:
           PR_TITLE: ${{ inputs.title || github.event.pull_request.title }}
         run: |
-          if (!/^(Revert \")*[a-zA-Z0-9]{2,10}-[0-9]{1,10}( |:|-|,).+/.test(process.env.PR_TITLE)) {
+          if (!/^(Revert \")*[a-zA-Z0-9]{2,10}(?<![J-j][I-i][R-r][A-a])-[0-9]{1,10}( |:|-|,).+/.test(process.env.PR_TITLE)) {
             console.error('PR Title does not match regex pattern!\nPlease follow format: "<JIRA_PROJ>-<JIRA_NUM>: <TITLE>"\nExample: "JIRA-404: Title Here"');
             process.exit(1);
           } else {

@@ -11,24 +11,29 @@ jobs:
     name: With Space - Expect Pass
     uses: ./.github/workflows/validate_pr.yml
     with:
-      title: "JIRA-007 Title here"
+      title: "TEST-007 Title here"
   with_colon:
     name: With Colon - Expect Pass
     uses: ./.github/workflows/validate_pr.yml
     with:
-      title: "JIRA-007: Title here"
+      title: "TEST-007: Title here"
   on_revert:
     name: On Revert - Expect Pass
     uses: ./.github/workflows/validate_pr.yml
     with:
-      title: "Revert \"JIRA-007: Title her\""
+      title: "Revert \"TEST-007: Title her\""
   with_no_title:
     name: With No Title - Expect Fail
     uses: ./.github/workflows/validate_pr.yml
     with:
-      title: "JIRA-007"
+      title: "TEST-007"
+  jira_contains_jira:
+    name: With JIRA in Title - Expect Fail
+    uses: ./.github/workflows/validate_pr.yml
+    with:
+      title: "JIRA-007: Test"
   verify_negative_tests:
-    needs: [with_no_title]
+    needs: [with_no_title, jira_contains_jira]
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -36,5 +41,9 @@ jobs:
         run: |
           if [ "${{ needs.with_no_title.result }}" != "failure" ]; then
             echo "No Title Passed when it shouldn't"
+            exit 1
+          fi
+          if [ "${{ needs.jira_contains_jira.result }}" != "failure" ]; then
+            echo "With JIRA in Title Passed when it shouldn't"
             exit 1
           fi
